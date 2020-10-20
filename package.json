@@ -1,0 +1,21 @@
+{
+  "name": "tree-sitter-fsharp",
+  "version": "0.0.1",
+  "description": "A tree-sitter grammar for F#",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tree-sitter",
+    "fsharp"
+  ],
+  "author": "Chet Husk",
+  "license": "MIT",
+  "dependencies": {
+    "nan": "^2.14.2"
+  },
+  "devDependencies": {
+    "tree-sitter-cli": "^0.17.1"
+  }
+}
