@@ -1,6 +1,19 @@
 {
   "name": "fsharp",
   "rules": {
+    "test": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "comment"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        }
+      ]
+    },
     "comment": {
       "type": "TOKEN",
       "content": {
@@ -41,6 +54,105 @@
           }
         ]
       }
+    },
+    "_letter_char": {
+      "type": "PATTERN",
+      "value": "[a-zA-Z]"
+    },
+    "_digit_char": {
+      "type": "PATTERN",
+      "value": "[0-9]"
+    },
+    "_connecting_char": {
+      "type": "PATTERN",
+      "value": "[:punct:]"
+    },
+    "_formatting_char": {
+      "type": "PATTERN",
+      "value": "[:cntrl:]"
+    },
+    "_identifier_start_char": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_letter_char"
+        },
+        {
+          "type": "PATTERN",
+          "value": "_"
+        }
+      ]
+    },
+    "_identifier_char": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_letter_char"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_digit_char"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_connecting_char"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_formatting_char"
+        },
+        {
+          "type": "PATTERN",
+          "value": "'"
+        },
+        {
+          "type": "PATTERN",
+          "value": "_"
+        }
+      ]
+    },
+    "_ident_text": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_identifier_start_char"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_identifier_char"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "_escaped_ident_text": {
+      "type": "PATTERN",
+      "value": "``([^`\\n\\r\\t] | `[^`\\n\\r\\t])+``"
+    },
+    "identifier": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_ident_text"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_escaped_ident_text"
+        }
+      ]
     }
   },
   "extras": [

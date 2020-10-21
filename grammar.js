@@ -29,33 +29,47 @@ module.exports = grammar({
     supertypes: $ => [],
     
     rules: {
+      // used to have a top-level node to test with until top-level acutal nodes are fleshed out
+      test: $ => choice(
+        $.comment,
+        $.identifier
+      ),
+
       comment: $ => token(choice(
         seq("(*", repeat(/.|\n|\r/), "*)"), // multiline comments
         seq("//", /[^\n\r]*/)
       )),
       
-      // _letter_char: $ => /[\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}]/,
-      // _digit_char: $ => /\p{Nd}/,
-      // _connecting_char: $ => /\p{Pc}/,
+      // the spec uses unicode character classes here, but tree-sitter doesn't support them.
+      // we try to map the character classes to best-effort ranges here
+      _letter_char: $ => /[a-zA-Z]/,
+      _digit_char: $ => /[0-9]/,
+      _connecting_char: $ => /[:punct:]/,
+      // how to encode this character class?
       // _combining_char: $ => /[\p{Mn}\p{Mc}]/,
-      // _formatting_char: $ => /\p{Cf}/,
-      // _identifier_start_char: $ => choice($._letter_char, /_/),
-      // _identifier_char: $ => choice(
-      //   $._letter_char,
-      //   $._digit_char,
-      //   $._connecting_char,
-      //   $._combining_char,
-      //   $._formatting_char,
-      //   /'/,
-      //   /_/
-      // ),
-      // _ident_text: $ => seq(
-      //   $._identifier_start_char,
-      //   $._identifier_char
-      // ),
-      // _escaped_ident_text: $ => /``([^`\n\r\t] | `[^`\n\r\t])+``/,
-      // identifier: $ => token(choice($._ident_text, $._escaped_ident_text))
-      
+      _formatting_char: $ => /[:cntrl:]/,
+      _identifier_start_char: $ => choice(
+        $._letter_char, 
+        /_/
+      ),
+      _identifier_char: $ => choice(
+        $._letter_char,
+        $._digit_char,
+        $._connecting_char,
+        // $._combining_char,
+        $._formatting_char,
+        /'/,
+        /_/
+      ),
+      _ident_text: $ => seq(
+        $._identifier_start_char,
+        optional(repeat($._identifier_char))
+      ),
+      _escaped_ident_text: $ => /``([^`\n\r\t] | `[^`\n\r\t])+``/,
+      identifier: $ => choice(
+        $._ident_text,
+        $._escaped_ident_text
+      )
     }
   });
   

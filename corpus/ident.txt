@@ -1,0 +1,39 @@
+===
+basic ident
+===
+
+sample
+
+---
+
+(test (identifier))
+
+===
+ident with numbers
+===
+
+wh0ar3y0u
+
+---
+
+(test (identifier))
+
+===
+tick ident
+===
+
+``I can have anything in here ASDFAS?DFS``
+
+--- 
+
+(test (identifier))
+
+===
+ident with leading _
+===
+
+_yo
+
+---
+
+(test (identifier))

@@ -6,7 +6,7 @@ single line block comment
 
 ---
 
-(comment)
+(test (comment))
 
 ===
 multiline block comment
@@ -23,7 +23,7 @@ how
 
 ---
 
-(comment)
+(test (comment))
 
 ===
 doubleslash comment
@@ -33,4 +33,4 @@ doubleslash comment
 
 ---
 
-(comment)
+(test (comment))
