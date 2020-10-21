@@ -1,11 +1,31 @@
 [
   {
+    "type": "bytearray",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "bytechar",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "char",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "identifier",
     "named": true,
     "fields": {}
   },
   {
     "type": "keyword",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "string",
     "named": true,
     "fields": {}
   },
@@ -18,6 +38,18 @@
       "required": true,
       "types": [
         {
+          "type": "bytearray",
+          "named": true
+        },
+        {
+          "type": "bytechar",
+          "named": true
+        },
+        {
+          "type": "char",
+          "named": true
+        },
+        {
           "type": "comment",
           "named": true
         },
@@ -28,9 +60,92 @@
         {
           "type": "keyword",
           "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "triple_quoted_string",
+          "named": true
+        },
+        {
+          "type": "verbatim_bytearray",
+          "named": true
+        },
+        {
+          "type": "verbatim_string",
+          "named": true
         }
       ]
     }
+  },
+  {
+    "type": "triple_quoted_string",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "verbatim_bytearray",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "verbatim_string",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "",
+    "named": false
+  },
+  {
+    "type": "\n",
+    "named": false
+  },
+  {
+    "type": "\r\n",
+    "named": false
+  },
+  {
+    "type": " ",
+    "named": false
+  },
+  {
+    "type": "\"",
+    "named": false
+  },
+  {
+    "type": "\"\"\"",
+    "named": false
+  },
+  {
+    "type": "\"B",
+    "named": false
+  },
+  {
+    "type": "'",
+    "named": false
+  },
+  {
+    "type": "'B",
+    "named": false
+  },
+  {
+    "type": "@\"",
+    "named": false
+  },
+  {
+    "type": "\\",
+    "named": false
+  },
+  {
+    "type": "\\U",
+    "named": false
+  },
+  {
+    "type": "\\u",
+    "named": false
   },
   {
     "type": "abstract",

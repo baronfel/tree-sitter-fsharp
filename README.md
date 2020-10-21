@@ -34,7 +34,10 @@ See [the tree-sitter getting started](https://tree-sitter.github.io/tree-sitter/
 - [x] comments
 - [ ] conditional compilation
 - [x] identifiers and keywords
-- [ ] strings and characters
+- [o] strings and characters
+  - [ ] verbatim strings
+  - [ ] triple-quote strings
+  - [ ] verbatim bytearrays
 - [ ] symbolic keywords
 - [ ] symbolic operators
 - [ ] numeric literals

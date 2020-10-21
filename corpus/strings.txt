@@ -1,0 +1,49 @@
+===
+simple string
+===
+
+"I'm a string"
+
+---
+
+(test (string))
+
+===
+simple char
+===
+
+'I'
+
+---
+
+(test (char))
+
+===
+bytechars
+===
+
+'6'B
+
+---
+
+(test (bytechar))
+
+===
+bytearrays
+===
+
+"face"B
+
+---
+
+(test (bytearray))
+
+===
+trips
+===
+
+""" yo """
+
+---
+
+(test (triple_quoted_string))
