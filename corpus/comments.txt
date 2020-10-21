@@ -1,0 +1,36 @@
+===
+single line block comment
+===
+
+(* I am a comment on a single line *)
+
+---
+
+(comment)
+
+===
+multiline block comment
+===
+
+(* I am a comment on a 
+multiple lines
+
+see
+how
+"I flyyyy*)"
+
+*)
+
+---
+
+(comment)
+
+===
+doubleslash comment
+===
+
+// this is a comment too
+
+---
+
+(comment)

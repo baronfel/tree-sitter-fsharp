@@ -34,27 +34,27 @@ module.exports = grammar({
         seq("//", /[^\n\r]*/)
       )),
       
-      _letter_char: $ => /[\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}]/,
-      _digit_char: $ => /\p{Nd}/,
-      _connecting_char: $ => /\p{Pc}/,
-      _combining_char: $ => /[\p{Mn}\p{Mc}]/,
-      _formatting_char: $ => /\p{Cf}/,
-      _identifier_start_char: $ => choice($._letter_char, /_/),
-      _identifier_char: $ => choice(
-        $._letter_char,
-        $._digit_char,
-        $._connecting_char,
-        $._combining_char,
-        $._formatting_char,
-        /'/,
-        /_/
-      ),
-      _ident_text: $ => seq(
-        $._identifier_start_char,
-        $._identifier_char
-      ),
-      _escaped_ident_text: $ => /``([^`\n\r\t] | `[^`\n\r\t])+``/,
-      identifier: $ => token(choice($._ident_text, $._escaped_ident_text))
+      // _letter_char: $ => /[\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}]/,
+      // _digit_char: $ => /\p{Nd}/,
+      // _connecting_char: $ => /\p{Pc}/,
+      // _combining_char: $ => /[\p{Mn}\p{Mc}]/,
+      // _formatting_char: $ => /\p{Cf}/,
+      // _identifier_start_char: $ => choice($._letter_char, /_/),
+      // _identifier_char: $ => choice(
+      //   $._letter_char,
+      //   $._digit_char,
+      //   $._connecting_char,
+      //   $._combining_char,
+      //   $._formatting_char,
+      //   /'/,
+      //   /_/
+      // ),
+      // _ident_text: $ => seq(
+      //   $._identifier_start_char,
+      //   $._identifier_char
+      // ),
+      // _escaped_ident_text: $ => /``([^`\n\r\t] | `[^`\n\r\t])+``/,
+      // identifier: $ => token(choice($._ident_text, $._escaped_ident_text))
       
     }
   });
