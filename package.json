@@ -4,7 +4,9 @@
   "description": "A tree-sitter grammar for F#",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tree-sitter test",
+    "generate": "tree-sitter generate",
+    "parse": "tree-sitter parse"
   },
   "keywords": [
     "tree-sitter",
