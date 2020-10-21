@@ -27,3 +27,29 @@ See [the tree-sitter getting started](https://tree-sitter.github.io/tree-sitter/
 ## References
 
 * Docs on [tree-sitter grammar](https://tree-sitter.github.io/tree-sitter/creating-parsers#writing-the-grammar)
+
+## Progress (based on language spec sections)
+
+- [x] whitespace
+- [x] comments
+- [ ] conditional compilation
+- [ ] identifiers and keywords
+- [ ] strings and characters
+- [ ] symbolic keywords
+- [ ] symbolic operators
+- [ ] numeric literals
+- [ ] line directives
+- [ ] hidden tokens
+- [ ] identifier replacements
+- [ ] operator names
+- [ ] long idents
+- [ ] constants
+- [ ] operators and precedence
+- [ ] types and type constraints
+- [ ] expressions
+- [ ] patterns
+- [ ] type definitions
+- [ ] units of measure
+- [ ] namespaces and modules
+- [ ] namespace and module signatures
+- [ ] lexical filtering (maybe not necessary?)
