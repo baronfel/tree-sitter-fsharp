@@ -1,3 +1,10 @@
+const keywords = [ 'abstract', 'and', 'as', 'assert', 'base', 'begin', 'class', 'default', 'delegate', 'do', 'done', 'downcast', 'downto', 'elif', 'else', 'end',
+                   'exception', 'extern', 'false', 'finally', 'for', 'fun', 'function', 'global', 'if', 'in', 'inherit', 'inline', 'interface', 'internal', 'lazy', 'let',
+                   'match', 'member', 'module', 'mutable', 'namespace', 'new', 'null', 'of', 'open', 'or', 'override', 'private', 'public', 'rec', 'return', 'sig', 'static',
+                   'struct', 'then', 'to', 'true', 'try', 'type', 'upcast', 'use', 'val', 'void', 'when', 'while', 'with', 'yield' ];
+const reserved_words = ['atomic', 'break', 'checked', 'component', 'const', 'constraint', 'constructor', 'continue', 'eager', 'fixed', 'fori', 'functor', 'include',
+                        'measure', 'method', 'mixin', 'object', 'parallel', 'params', 'process', 'protected', 'pure', 'recursive', 'sealed', 'tailcall', 'trait', 'virtual', 'volatile'];
+
 module.exports = grammar({
     name: 'fsharp',
     
@@ -32,7 +39,8 @@ module.exports = grammar({
       // used to have a top-level node to test with until top-level acutal nodes are fleshed out
       test: $ => choice(
         $.comment,
-        $.identifier
+        $.identifier,
+        $.keyword
       ),
 
       comment: $ => token(choice(
@@ -66,6 +74,10 @@ module.exports = grammar({
         optional(repeat($._identifier_char))
       ),
       _escaped_ident_text: $ => /``([^`\n\r\t] | `[^`\n\r\t])+``/,
+      keyword: $ => choice(
+        ...keywords,
+        ...reserved_words
+      ),
       identifier: $ => choice(
         $._ident_text,
         $._escaped_ident_text

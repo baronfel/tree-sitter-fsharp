@@ -33,7 +33,7 @@ See [the tree-sitter getting started](https://tree-sitter.github.io/tree-sitter/
 - [x] whitespace
 - [x] comments
 - [ ] conditional compilation
-- [ ] identifiers and keywords
+- [x] identifiers and keywords
 - [ ] strings and characters
 - [ ] symbolic keywords
 - [ ] symbolic operators
