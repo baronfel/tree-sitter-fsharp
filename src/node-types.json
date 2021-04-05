@@ -15,7 +15,35 @@
     "fields": {}
   },
   {
+    "type": "cond_directive",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "else_directive",
+          "named": true
+        },
+        {
+          "type": "endif_directive",
+          "named": true
+        },
+        {
+          "type": "if_directive",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "identifier",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "if_directive",
     "named": true,
     "fields": {}
   },
@@ -51,6 +79,10 @@
         },
         {
           "type": "comment",
+          "named": true
+        },
+        {
+          "type": "cond_directive",
           "named": true
         },
         {
@@ -112,6 +144,10 @@
     "named": false
   },
   {
+    "type": "!",
+    "named": false
+  },
+  {
     "type": "\"",
     "named": false
   },
@@ -124,11 +160,39 @@
     "named": false
   },
   {
+    "type": "#if",
+    "named": false
+  },
+  {
+    "type": "&&",
+    "named": false
+  },
+  {
     "type": "'",
     "named": false
   },
   {
     "type": "'B",
+    "named": false
+  },
+  {
+    "type": "(",
+    "named": false
+  },
+  {
+    "type": "(*",
+    "named": false
+  },
+  {
+    "type": ")",
+    "named": false
+  },
+  {
+    "type": "*)",
+    "named": false
+  },
+  {
+    "type": "//",
     "named": false
   },
   {
@@ -248,8 +312,16 @@
     "named": false
   },
   {
+    "type": "else_directive",
+    "named": true
+  },
+  {
     "type": "end",
     "named": false
+  },
+  {
+    "type": "endif_directive",
+    "named": true
   },
   {
     "type": "exception",
@@ -513,6 +585,10 @@
   },
   {
     "type": "yield",
+    "named": false
+  },
+  {
+    "type": "||",
     "named": false
   }
 ]

@@ -9,16 +9,41 @@ simple string
 (test (string))
 
 ===
+multiline string
+===
+
+"I'm a tall \
+    string"
+
+---
+
+(test (string))
+
+===
 simple char
 ===
 
-'I'
+' '
 
 ---
 
 (test (char))
 
 ===
+escape char
+===
+'\n'
+---
+(test (char))
+
+===
+unicodegraph char
+===
+'\u2A0e'
+---
+(test (char))
+===
+
 bytechars
 ===
 
