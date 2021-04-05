@@ -2,5 +2,6 @@ node_modules
 .vscode
 build
 .ccls-cache
-Cargo.toml
-bindings
+parser.exp
+parser.lib
+parser.obj
