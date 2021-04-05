@@ -50,27 +50,52 @@ module.exports = grammar({
         $.bytechar,
         $.string,
         $.char,
+        $.cond_directive,
       ),
       
+      // 3.1 Whitespace
       _whitespace: $ => repeat1(' '),
       _newline: $ => choice(
         '\n',
-        '\r\n'
-      ),
+        '\r\n'),
+      _whitespace_or_newline: $ => choice(
+        $._whitespace,
+        $._newline),
 
+      // 3.2 Comments
+      _single_line_comment: $ => seq("//", /[^\n\r]*/),
+      _multi_line_comment: $ => seq("(*", repeat(/.|\n|\r/), "*)"),
       comment: $ => token(choice(
-        seq("(*", repeat(/.|\n|\r/), "*)"), // multiline comments
-        seq("//", /[^\n\r]*/)
-      )),
+        // cannot use symbols in a token definition
+        // see: https://github.com/tree-sitter/tree-sitter/issues/449
+        seq("//", /[^\n\r]*/),  // single line
+        seq("(*", repeat(/.|\n|\r/), "*)"))), // multi line
+
+      // 3.3 Conditional Compilation
+      cond_directive: $ => choice(
+        $.if_directive,
+        $.else_directive,
+        $.endif_directive),
+      // XXX line occupation rule ignored
+      if_directive: $ => seq(
+        "#if",
+        $._if_expression_text),
+      else_directive: $ => "#else",
+      endif_directive: $ => "#endif",
+      _if_expression_text: $ => choice(
+        prec.left(1, seq($._if_expression_text, "||", $._if_expression_text)),
+        prec.left(2, seq($._if_expression_text, "&&", $._if_expression_text)),
+        prec.left(3, seq("!", $._if_expression_text)),
+        prec.left(4, seq("(", $._if_expression_text, ")")),
+        $._ident_text,
+      ),
       
-      // the spec uses unicode character classes here, but tree-sitter doesn't support them.
-      // we try to map the character classes to best-effort ranges here
-      _letter_char: $ => /[a-zA-Z]/,
+      // 3.4 Identifiers and Keywords
       _digit_char: $ => /[0-9]/,
-      _connecting_char: $ => /[:punct:]/,
-      // how to encode this character class?
-      // _combining_char: $ => /[\p{Mn}\p{Mc}]/,
-      _formatting_char: $ => /[:cntrl:]/,
+      _letter_char: $ => /\p{Lu}|\p{Ll}|\p{Lt}|\p{Lm}|\p{Lo}|\p{Nl}/,
+      _connecting_char: $ => /\p{Pc}/,
+      _combining_char: $ => /\p{Mn}|\p{Mc}/,
+      _formatting_char: $ => /\p{Cf}/,
       _identifier_start_char: $ => choice(
         $._letter_char, 
         /_/
@@ -79,7 +104,7 @@ module.exports = grammar({
         $._letter_char,
         $._digit_char,
         $._connecting_char,
-        // $._combining_char,
+        $._combining_char,
         $._formatting_char,
         /'/,
         /_/
@@ -89,21 +114,21 @@ module.exports = grammar({
         optional(repeat($._identifier_char))
       ),
       _escaped_ident_text: $ => /``([^`\n\r\t] | `[^`\n\r\t])+``/,
-      keyword: $ => choice(
-        ...keywords,
-        ...reserved_words
-      ),
       identifier: $ => choice(
         $._ident_text,
         $._escaped_ident_text
       ),
 
+      keyword: $ => choice(
+        ...keywords,
+        ...reserved_words
+      ),
+
+      // 3.5 Strings and Characters
       _escape_char: $ => /\\["\'ntbrafv]/,
-      // TODO: this class needs work. we want to say 'not the above escape characters', but
-      // tree-sitter doesn't support negating the ["\'ntbrafv] class like ^["\'ntbrafv] for example.
-      _non_escape_char: $ => /\\[cdeghijklmopqrsuwxyzCDEGHIKJLMOPQRSUWXYZ0-9\/]/,
-      // NOTE: seriously deficient here, running into tree-sitter compat issues
-      _simple_string_char: $ => /[a-zA-Z0-9']/,
+      _non_escape_char: $ => /\\[^"\'ntbrafv]/,
+      // using \u0008 to model \b
+      _simple_char_char: $ => /[^\n\t\r\u0008\a\f\v'\\]/,
       _hex_digit: $ => /[0-9a-fA-F]/,
       _unicodegraph_short: $ => seq(
         '\\u',
@@ -124,12 +149,16 @@ module.exports = grammar({
         $._hex_digit,
       ),
       _trigraph: $ => seq('\\', $._digit_char, $._digit_char, $._digit_char),
+
       _char_char: $ => choice(
-        $._simple_string_char,
+        $._simple_char_char,
         $._escape_char,
         $._trigraph,
         $._unicodegraph_short
       ),
+
+      // note: \n is allowed in strings
+      _simple_string_char: $ => /[^\t\r\u0008\a\f\v\\"]/,
       _string_char: $ => choice(
         $._simple_string_char,
         $._escape_char,
@@ -143,7 +172,7 @@ module.exports = grammar({
         $._string_char,
         seq('\\', $._newline, repeat($._whitespace), $._string_elem)
       ),
-      char: $ => seq("\'", $._char_char, "\'"),
+      char: $ => seq("'", $._char_char, "'"),
       string: $ => seq("\"", repeat($._string_char), "\""),
       _verbatim_string_char: $ => choice(
         $._simple_string_char,
@@ -156,9 +185,7 @@ module.exports = grammar({
       bytechar: $ => seq('\'', $._simple_or_escape_char, '\'B'),
       bytearray: $ => seq("\"", repeat($._string_char), "\"B"),
       verbatim_bytearray: $ => seq("@\"", repeat($._verbatim_string_char), "\"B"),
-      _simple_or_escape_char: $ => choice($._escape_char, $._simple_char),
-      // NOTE: this regex is mangled because of lack of negation-support
-      _simple_char: $ => /[a-zA-Z]/,
+      _simple_or_escape_char: $ => choice($._escape_char, token.immediate(/[^'\\]/)),
       triple_quoted_string: $ => seq('\"\"\"', repeat($._simple_or_escape_char), '\"\"\"'),
     }
   });

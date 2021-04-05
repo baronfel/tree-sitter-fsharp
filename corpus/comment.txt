@@ -9,6 +9,16 @@ single line block comment
 (test (comment))
 
 ===
+single line block comment 2
+===
+
+(* Here's a code snippet: let s = "*)" *)
+
+---
+
+(test (comment))
+
+===
 multiline block comment
 ===
 
