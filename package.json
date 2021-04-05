@@ -2,7 +2,7 @@
   "name": "tree-sitter-fsharp",
   "version": "0.0.1",
   "description": "A tree-sitter grammar for F#",
-  "main": "index.js",
+  "main": "bindings/node",
   "scripts": {
     "test": "tree-sitter test",
     "generate": "tree-sitter generate",
@@ -18,6 +18,6 @@
     "nan": "^2.14.2"
   },
   "devDependencies": {
-    "tree-sitter-cli": "^0.17.1"
+    "tree-sitter-cli": "^0.19.4"
   }
 }

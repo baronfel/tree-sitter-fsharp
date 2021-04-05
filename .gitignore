@@ -1,2 +1,6 @@
 node_modules
 .vscode
+build
+.ccls-cache
+Cargo.toml
+bindings
