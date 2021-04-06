@@ -1,9 +1,23 @@
-const keywords = [ 'abstract', 'and', 'as', 'assert', 'base', 'begin', 'class', 'default', 'delegate', 'do', 'done', 'downcast', 'downto', 'elif', 'else', 'end',
-                   'exception', 'extern', 'false', 'finally', 'for', 'fun', 'function', 'global', 'if', 'in', 'inherit', 'inline', 'interface', 'internal', 'lazy', 'let',
-                   'match', 'member', 'module', 'mutable', 'namespace', 'new', 'null', 'of', 'open', 'or', 'override', 'private', 'public', 'rec', 'return', 'sig', 'static',
-                   'struct', 'then', 'to', 'true', 'try', 'type', 'upcast', 'use', 'val', 'void', 'when', 'while', 'with', 'yield' ];
-const reserved_words = ['atomic', 'break', 'checked', 'component', 'const', 'constraint', 'constructor', 'continue', 'eager', 'fixed', 'fori', 'functor', 'include',
-                        'measure', 'method', 'mixin', 'object', 'parallel', 'params', 'process', 'protected', 'pure', 'recursive', 'sealed', 'tailcall', 'trait', 'virtual', 'volatile'];
+const keywords = [ 
+  'abstract', 'and', 'as', 'assert', 'base', 'begin', 'class', 'default', 
+  'delegate', 'do', 'done', 'downcast', 'downto', 'elif', 'else', 'end',
+  'exception', 'extern', 'false', 'finally', 'for', 'fun', 'function', 'global',
+  'if', 'in', 'inherit', 'inline', 'interface', 'internal', 'lazy', 'let',
+  'match', 'member', 'module', 'mutable', 'namespace', 'new', 'null', 'of', 
+  'open', 'or', 'override', 'private', 'public', 'rec', 'return', 'sig', 
+  'static', 'struct', 'then', 'to', 'true', 'try', 'type', 'upcast', 'use',
+  'val', 'void', 'when', 'while', 'with', 'yield' ];
+const reserved_words = [
+  'atomic', 'break', 'checked', 'component', 'const', 'constraint', 
+  'constructor', 'continue', 'eager', 'fixed', 'fori', 'functor', 'include',
+  'measure', 'method', 'mixin', 'object', 'parallel', 'params', 'process', 
+  'protected', 'pure', 'recursive', 'sealed', 'tailcall', 'trait', 'virtual', 
+  'volatile'];
+const symbolic_keywords = [
+  'let!', 'use!', 'do!', 'yield!', 'return!', '|', '->', '<-.', ':', '(', ')', 
+  '[', ']', '[<', '>]', '[|', '|]', '{', '}', '\'', '#', ':?>', ':?', ':>', 
+  '..', '::', ':=', ';;', ';', '=_', '?', '??', '(*)', '<@', '@>', '<@@', '@@>'];
+const reserved_symbolic_sequences = ['~', '`']
 
 
 
@@ -23,7 +37,13 @@ module.exports = grammar({
     /**
      * an array of arrays of rule names. Each inner array represents a set of rules that’s involved in an LR(1) conflict that is intended to exist in the grammar. When these conflicts occur at runtime, Tree-sitter will use the GLR algorithm to explore all of the possible interpretations. If multiple parses end up succeeding, Tree-sitter will pick the subtree whose corresponding rule has the highest total dynamic precedence.
      */
-    conflicts: $ => [],
+    conflicts: $ => [
+      [$.symbolic_keyword, $.symbolic_op],
+      [$._quote_op_left, $.symbolic_op],
+      [$._quote_op_right, $.symbolic_op],
+      [$._quote_op_left, $.symbolic_keyword],
+      [$._quote_op_right, $.symbolic_keyword],
+    ],
     /**
      * an array of token names which can be returned by an external scanner. External scanners allow you to write custom C code which runs during the lexing process in order to handle lexical rules (e.g. Python’s indentation tokens) that cannot be described by regular expressions.
      */
@@ -51,6 +71,8 @@ module.exports = grammar({
         $.string,
         $.char,
         $.cond_directive,
+        $.symbolic_keyword,
+        $.symbolic_op,
       ),
       
       // 3.1 Whitespace
@@ -111,7 +133,7 @@ module.exports = grammar({
       ),
       _ident_text: $ => seq(
         $._identifier_start_char,
-        optional(repeat($._identifier_char))
+        repeat($._identifier_char)
       ),
       _escaped_ident_text: $ => /``([^`\n\r\t] | `[^`\n\r\t])+``/,
       identifier: $ => choice(
@@ -187,5 +209,20 @@ module.exports = grammar({
       verbatim_bytearray: $ => seq('@"', repeat($._verbatim_string_char), token.immediate('"B')),
       _simple_or_escape_char: $ => choice($._escape_char, token.immediate(/[^'\\]/)),
       triple_quoted_string: $ => seq('"""', repeat($._simple_or_escape_char), token.immediate('"""')),
+
+      // 3.6 Symbolic Keywords
+      symbolic_keyword: $ => choice(...symbolic_keywords, ...reserved_symbolic_sequences),
+
+      // 3.7 Symbolic Operators
+      _first_op_char: $ => /[!%&*+-./<=>@^|~]/,
+      _op_char: $ => choice($._first_op_char, '?'),
+      _quote_op_left: $ => choice("<@", "<@@"),
+      _quote_op_right: $ => choice("@>", "@@>"),
+      symbolic_op: $ => choice(
+        "?", 
+        "?<-", 
+        seq($._first_op_char, repeat($._op_char)),
+        $._quote_op_left,
+        $._quote_op_right),
     }
   });

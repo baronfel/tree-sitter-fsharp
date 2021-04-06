@@ -1,0 +1,13 @@
+===
+symbolic keyword
+===
+?
+---
+(test (symbolic_keyword))
+
+===
+custom symbolic op
+===
+>>=??
+---
+(test (symbolic_op))
