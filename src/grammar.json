@@ -30,6 +30,18 @@
         },
         {
           "type": "SYMBOL",
+          "name": "cond_directive"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "symbolic_keyword"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "symbolic_op"
+        },
+        {
+          "type": "SYMBOL",
           "name": "bytearray"
         },
         {
@@ -46,15 +58,63 @@
         },
         {
           "type": "SYMBOL",
-          "name": "cond_directive"
+          "name": "int"
         },
         {
           "type": "SYMBOL",
-          "name": "symbolic_keyword"
+          "name": "xint"
         },
         {
           "type": "SYMBOL",
-          "name": "symbolic_op"
+          "name": "float"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "decimal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "bignum"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "sbyte"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "byte"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "int16"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "uint16"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "int32"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "uint32"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "nativeint"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "unativeint"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "int64"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "uint64"
         }
       ]
     },
@@ -292,9 +352,12 @@
         }
       ]
     },
-    "_digit_char": {
-      "type": "PATTERN",
-      "value": "[0-9]"
+    "_digit_char_imm": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "[0-9]"
+      }
     },
     "_letter_char": {
       "type": "PATTERN",
@@ -334,7 +397,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_digit_char"
+          "name": "_digit_char_imm"
         },
         {
           "type": "SYMBOL",
@@ -781,7 +844,7 @@
         "value": "[^\\n\\t\\r\\u0008\\a\\f\\v'\\\\]"
       }
     },
-    "_hex_digit": {
+    "_hex_digit_imm": {
       "type": "IMMEDIATE_TOKEN",
       "content": {
         "type": "PATTERN",
@@ -800,19 +863,19 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_hex_digit"
+          "name": "_hex_digit_imm"
         },
         {
           "type": "SYMBOL",
-          "name": "_hex_digit"
+          "name": "_hex_digit_imm"
         },
         {
           "type": "SYMBOL",
-          "name": "_hex_digit"
+          "name": "_hex_digit_imm"
         },
         {
           "type": "SYMBOL",
-          "name": "_hex_digit"
+          "name": "_hex_digit_imm"
         }
       ]
     },
@@ -828,35 +891,35 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_hex_digit"
+          "name": "_hex_digit_imm"
         },
         {
           "type": "SYMBOL",
-          "name": "_hex_digit"
+          "name": "_hex_digit_imm"
         },
         {
           "type": "SYMBOL",
-          "name": "_hex_digit"
+          "name": "_hex_digit_imm"
         },
         {
           "type": "SYMBOL",
-          "name": "_hex_digit"
+          "name": "_hex_digit_imm"
         },
         {
           "type": "SYMBOL",
-          "name": "_hex_digit"
+          "name": "_hex_digit_imm"
         },
         {
           "type": "SYMBOL",
-          "name": "_hex_digit"
+          "name": "_hex_digit_imm"
         },
         {
           "type": "SYMBOL",
-          "name": "_hex_digit"
+          "name": "_hex_digit_imm"
         },
         {
           "type": "SYMBOL",
-          "name": "_hex_digit"
+          "name": "_hex_digit_imm"
         }
       ]
     },
@@ -872,15 +935,15 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_digit_char"
+          "name": "_digit_char_imm"
         },
         {
           "type": "SYMBOL",
-          "name": "_digit_char"
+          "name": "_digit_char_imm"
         },
         {
           "type": "SYMBOL",
-          "name": "_digit_char"
+          "name": "_digit_char_imm"
         }
       ]
     },
@@ -1409,6 +1472,534 @@
         {
           "type": "SYMBOL",
           "name": "_quote_op_right"
+        }
+      ]
+    },
+    "_octaldigit_imm": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "[0-7]"
+      }
+    },
+    "_bitdigit_imm": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "[0-1]"
+      }
+    },
+    "int": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "PATTERN",
+          "value": "[0-9]"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_digit_char_imm"
+          }
+        }
+      ]
+    },
+    "xint": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "0[xX]"
+            },
+            {
+              "type": "REPEAT1",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_hex_digit_imm"
+              }
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "0[oO]"
+            },
+            {
+              "type": "REPEAT1",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_octaldigit_imm"
+              }
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "0[bB]"
+            },
+            {
+              "type": "REPEAT1",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_bitdigit_imm"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "sbyte": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "int"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "xint"
+            }
+          ]
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": "y"
+          }
+        }
+      ]
+    },
+    "byte": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "int"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "xint"
+            }
+          ]
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": "uy"
+          }
+        }
+      ]
+    },
+    "int16": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "int"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "xint"
+            }
+          ]
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": "s"
+          }
+        }
+      ]
+    },
+    "uint16": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "int"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "xint"
+            }
+          ]
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": "us"
+          }
+        }
+      ]
+    },
+    "int32": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "int"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "xint"
+            }
+          ]
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": "l"
+          }
+        }
+      ]
+    },
+    "uint32": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "int"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "xint"
+            }
+          ]
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "ul"
+              },
+              {
+                "type": "STRING",
+                "value": "u"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "nativeint": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "int"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "xint"
+            }
+          ]
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": "n"
+          }
+        }
+      ]
+    },
+    "unativeint": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "int"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "xint"
+            }
+          ]
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": "un"
+          }
+        }
+      ]
+    },
+    "int64": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "int"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "xint"
+            }
+          ]
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": "L"
+          }
+        }
+      ]
+    },
+    "uint64": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "int"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "xint"
+            }
+          ]
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "UL"
+              },
+              {
+                "type": "STRING",
+                "value": "uL"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "ieee32": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "float"
+            },
+            {
+              "type": "IMMEDIATE_TOKEN",
+              "content": {
+                "type": "PATTERN",
+                "value": "[fF]"
+              }
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "xint"
+            },
+            {
+              "type": "IMMEDIATE_TOKEN",
+              "content": {
+                "type": "STRING",
+                "value": "lf"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "ieee64": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "float"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "xint"
+            },
+            {
+              "type": "IMMEDIATE_TOKEN",
+              "content": {
+                "type": "STRING",
+                "value": "LF"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "bignum": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "int"
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "PATTERN",
+            "value": "[QRZING]"
+          }
+        }
+      ]
+    },
+    "decimal": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "float"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "int"
+            }
+          ]
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "PATTERN",
+            "value": "[Mm]"
+          }
+        }
+      ]
+    },
+    "float": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "int"
+            },
+            {
+              "type": "IMMEDIATE_TOKEN",
+              "content": {
+                "type": "PATTERN",
+                "value": "\\.[0-9]*"
+              }
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "int"
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "IMMEDIATE_TOKEN",
+                  "content": {
+                    "type": "PATTERN",
+                    "value": "\\.[0-9]*"
+                  }
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            },
+            {
+              "type": "IMMEDIATE_TOKEN",
+              "content": {
+                "type": "PATTERN",
+                "value": "[eE]"
+              }
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "IMMEDIATE_TOKEN",
+                  "content": {
+                    "type": "PATTERN",
+                    "value": "[+-]"
+                  }
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            },
+            {
+              "type": "IMMEDIATE_TOKEN",
+              "content": {
+                "type": "PATTERN",
+                "value": "[0-9]+"
+              }
+            }
+          ]
         }
       ]
     }

@@ -1,0 +1,50 @@
+===
+int
+===
+123
+---
+(test (int))
+
+===
+xint
+===
+0x123
+---
+(test (xint))
+
+
+===
+float
+===
+3.14
+---
+(test (float (int)))
+
+===
+float 2
+===
+1.0E-3
+---
+(test (float (int)))
+
+===
+float32
+===
+1.0f
+---
+(test (ieee32))
+
+===
+float64
+===
+0x7C00LF
+---
+(test (ieee64))
+
+
+===
+decimal
+===
+123m
+---
+(test (decimal (int)))
