@@ -125,20 +125,20 @@ module.exports = grammar({
       ),
 
       // 3.5 Strings and Characters
-      _escape_char: $ => /\\["\'ntbrafv]/,
-      _non_escape_char: $ => /\\[^"\'ntbrafv]/,
+      _escape_char: $ => token.immediate(/\\["\'ntbrafv]/),
+      _non_escape_char: $ => token.immediate(/\\[^"\'ntbrafv]/),
       // using \u0008 to model \b
-      _simple_char_char: $ => /[^\n\t\r\u0008\a\f\v'\\]/,
-      _hex_digit: $ => /[0-9a-fA-F]/,
+      _simple_char_char: $ => token.immediate(/[^\n\t\r\u0008\a\f\v'\\]/),
+      _hex_digit: $ => token.immediate(/[0-9a-fA-F]/),
       _unicodegraph_short: $ => seq(
-        '\\u',
+        token.immediate('\\u'),
         $._hex_digit,
         $._hex_digit,
         $._hex_digit,
         $._hex_digit,
       ),
       _unicodegraph_long: $ => seq(
-        '\\U',
+        token.immediate('\\U'),
         $._hex_digit,
         $._hex_digit,
         $._hex_digit,
@@ -148,7 +148,7 @@ module.exports = grammar({
         $._hex_digit,
         $._hex_digit,
       ),
-      _trigraph: $ => seq('\\', $._digit_char, $._digit_char, $._digit_char),
+      _trigraph: $ => seq(token.immediate('\\'), $._digit_char, $._digit_char, $._digit_char),
 
       _char_char: $ => choice(
         $._simple_char_char,
@@ -172,8 +172,8 @@ module.exports = grammar({
         $._string_char,
         seq('\\', $._newline, repeat($._whitespace), $._string_elem)
       ),
-      char: $ => seq("'", $._char_char, "'"),
-      string: $ => seq("\"", repeat($._string_char), "\""),
+      char: $ => seq("'", $._char_char, token.immediate("'")),
+      string: $ => seq('"', repeat($._string_char), token.immediate('"')),
       _verbatim_string_char: $ => choice(
         $._simple_string_char,
         $._non_escape_char,
@@ -181,11 +181,11 @@ module.exports = grammar({
         '\\',
         ''
       ),
-      verbatim_string: $ => seq("@\"", repeat($._verbatim_string_char), "\""),
-      bytechar: $ => seq('\'', $._simple_or_escape_char, '\'B'),
-      bytearray: $ => seq("\"", repeat($._string_char), "\"B"),
-      verbatim_bytearray: $ => seq("@\"", repeat($._verbatim_string_char), "\"B"),
+      verbatim_string: $ => seq('@"', repeat($._verbatim_string_char), token.immediate('"')),
+      bytechar: $ => seq("'", $._char_char, token.immediate("'B")),
+      bytearray: $ => seq('"', repeat($._string_char), token.immediate('"B')),
+      verbatim_bytearray: $ => seq('@"', repeat($._verbatim_string_char), token.immediate('"B')),
       _simple_or_escape_char: $ => choice($._escape_char, token.immediate(/[^'\\]/)),
-      triple_quoted_string: $ => seq('\"\"\"', repeat($._simple_or_escape_char), '\"\"\"'),
+      triple_quoted_string: $ => seq('"""', repeat($._simple_or_escape_char), token.immediate('"""')),
     }
   });

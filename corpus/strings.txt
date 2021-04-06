@@ -23,7 +23,7 @@ multiline string
 simple char
 ===
 
-' '
+'i'
 
 ---
 
