@@ -18,14 +18,14 @@ float
 ===
 3.14
 ---
-(test (float (int)))
+(test (float))
 
 ===
 float 2
 ===
 1.0E-3
 ---
-(test (float (int)))
+(test (float))
 
 ===
 float32

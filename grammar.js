@@ -266,15 +266,15 @@ module.exports = grammar({
       int64:      $ => seq(choice($.int, $.xint), imm('L')),
       uint64:     $ => seq(choice($.int, $.xint), imm(choice('UL', 'uL'))),
 
-      ieee32: $ => choice(seq($.float, imm(/[fF]/)), seq($.xint, imm("lf"))),
+      ieee32: $ => choice(seq($.float, imm("f")), seq($.xint, imm("lf"))),
       ieee64: $ => choice($.float, seq($.xint, imm("LF"))),
 
       bignum:     $ => seq($.int, imm(/[QRZING]/)),
       decimal:    $ => seq(choice($.float,$.int), imm(/[Mm]/)),
 
-      float: $ => choice(
-        seq($.int, imm(/\.[0-9]*/)),
-        seq($.int, optional(imm(/\.[0-9]*/)), imm(/[eE]/), optional(imm(/[+-]/)), imm(/[0-9]+/))
-      ),
+      float: $ => token(choice(
+        seq(/[0-9]+/, imm(/\.[0-9]*/)),
+        seq(/[0-9]+/, optional(imm(/\.[0-9]*/)), imm(/[eE]/), optional(imm(/[+-]/)), imm(/[0-9]+/))
+      )),
     }
   });
