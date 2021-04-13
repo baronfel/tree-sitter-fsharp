@@ -1,5 +1,20 @@
 [
   {
+    "type": "active_pattern_op_name",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "bignum",
     "named": true,
     "fields": {},
@@ -72,6 +87,33 @@
     }
   },
   {
+    "type": "constraint",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "member_sig",
+          "named": true
+        },
+        {
+          "type": "static_typars",
+          "named": true
+        },
+        {
+          "type": "typar",
+          "named": true
+        },
+        {
+          "type": "type",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "decimal",
     "named": true,
     "fields": {},
@@ -91,12 +133,97 @@
     }
   },
   {
+    "type": "expr",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "expr",
+          "named": true
+        },
+        {
+          "type": "konst",
+          "named": true
+        },
+        {
+          "type": "long_identifier_or_op",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "ident_or_op",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "op_name",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "identifier",
     "named": true,
     "fields": {}
   },
   {
+    "type": "ieee32",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "xint",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "ieee64",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "xint",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "if_directive",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "infix_or_prefix_op",
     "named": true,
     "fields": {}
   },
@@ -168,6 +295,154 @@
     "fields": {}
   },
   {
+    "type": "konst",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "bignum",
+          "named": true
+        },
+        {
+          "type": "byte",
+          "named": true
+        },
+        {
+          "type": "bytearray",
+          "named": true
+        },
+        {
+          "type": "bytechar",
+          "named": true
+        },
+        {
+          "type": "char",
+          "named": true
+        },
+        {
+          "type": "ieee32",
+          "named": true
+        },
+        {
+          "type": "ieee64",
+          "named": true
+        },
+        {
+          "type": "int",
+          "named": true
+        },
+        {
+          "type": "int16",
+          "named": true
+        },
+        {
+          "type": "int32",
+          "named": true
+        },
+        {
+          "type": "int64",
+          "named": true
+        },
+        {
+          "type": "sbyte",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "triple_quoted_string",
+          "named": true
+        },
+        {
+          "type": "uint16",
+          "named": true
+        },
+        {
+          "type": "uint32",
+          "named": true
+        },
+        {
+          "type": "uint64",
+          "named": true
+        },
+        {
+          "type": "verbatim_bytearray",
+          "named": true
+        },
+        {
+          "type": "verbatim_string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "line_directive",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "int",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "verbatim_string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "long_identifier",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "long_identifier_or_op",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "ident_or_op",
+          "named": true
+        },
+        {
+          "type": "long_identifier",
+          "named": true
+        },
+        {
+          "type": "long_identifier_or_op",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "nativeint",
     "named": true,
     "fields": {},
@@ -187,6 +462,34 @@
     }
   },
   {
+    "type": "op_name",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "active_pattern_op_name",
+          "named": true
+        },
+        {
+          "type": "range_op_name",
+          "named": true
+        },
+        {
+          "type": "symbolic_op",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "range_op_name",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "sbyte",
     "named": true,
     "fields": {},
@@ -200,6 +503,21 @@
         },
         {
           "type": "xint",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "static_typars",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
           "named": true
         }
       ]
@@ -228,6 +546,10 @@
       "multiple": false,
       "required": true,
       "types": [
+        {
+          "type": "active_pattern_op_name",
+          "named": true
+        },
         {
           "type": "bignum",
           "named": true
@@ -289,11 +611,23 @@
           "named": true
         },
         {
+          "type": "line_directive",
+          "named": true
+        },
+        {
+          "type": "long_identifier",
+          "named": true
+        },
+        {
           "type": "nativeint",
           "named": true
         },
         {
           "type": "sbyte",
+          "named": true
+        },
+        {
+          "type": "shebang",
           "named": true
         },
         {
@@ -347,6 +681,131 @@
     "type": "triple_quoted_string",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "typar",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "typar_constraints",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "constraint",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "typar_defn",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "typar",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "typar_defns",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "typar_constraints",
+          "named": true
+        },
+        {
+          "type": "typar_defn",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "long_identifier",
+          "named": true
+        },
+        {
+          "type": "typar",
+          "named": true
+        },
+        {
+          "type": "typar_defns",
+          "named": true
+        },
+        {
+          "type": "type",
+          "named": true
+        },
+        {
+          "type": "type_args",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_arg",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "type",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_args",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "type_arg",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "uint16",
@@ -476,7 +935,35 @@
     "named": false
   },
   {
+    "type": "# ",
+    "named": false
+  },
+  {
     "type": "#if",
+    "named": false
+  },
+  {
+    "type": "#line",
+    "named": false
+  },
+  {
+    "type": "$",
+    "named": false
+  },
+  {
+    "type": "$.measure",
+    "named": false
+  },
+  {
+    "type": "$.static_parameter",
+    "named": false
+  },
+  {
+    "type": "%",
+    "named": false
+  },
+  {
+    "type": "&",
     "named": false
   },
   {
@@ -489,6 +976,10 @@
   },
   {
     "type": "'B",
+    "named": false
+  },
+  {
+    "type": "'T",
     "named": false
   },
   {
@@ -508,7 +999,31 @@
     "named": false
   },
   {
+    "type": "*",
+    "named": false
+  },
+  {
     "type": "*)",
+    "named": false
+  },
+  {
+    "type": "+",
+    "named": false
+  },
+  {
+    "type": "+.",
+    "named": false
+  },
+  {
+    "type": ",",
+    "named": false
+  },
+  {
+    "type": "-",
+    "named": false
+  },
+  {
+    "type": "-.",
     "named": false
   },
   {
@@ -516,7 +1031,15 @@
     "named": false
   },
   {
+    "type": ".",
+    "named": false
+  },
+  {
     "type": "..",
+    "named": false
+  },
+  {
+    "type": ".. ..",
     "named": false
   },
   {
@@ -556,6 +1079,10 @@
     "named": false
   },
   {
+    "type": "<",
+    "named": false
+  },
+  {
     "type": "<-.",
     "named": false
   },
@@ -569,6 +1096,10 @@
   },
   {
     "type": "=_",
+    "named": false
+  },
+  {
+    "type": ">",
     "named": false
   },
   {
@@ -636,6 +1167,14 @@
     "named": false
   },
   {
+    "type": "^",
+    "named": false
+  },
+  {
+    "type": "_",
+    "named": false
+  },
+  {
     "type": "`",
     "named": false
   },
@@ -682,6 +1221,10 @@
   {
     "type": "comment",
     "named": true
+  },
+  {
+    "type": "comparison",
+    "named": false
   },
   {
     "type": "component",
@@ -754,6 +1297,14 @@
   {
     "type": "endif_directive",
     "named": true
+  },
+  {
+    "type": "enum",
+    "named": false
+  },
+  {
+    "type": "equality",
+    "named": false
   },
   {
     "type": "exception",
@@ -868,6 +1419,10 @@
     "named": false
   },
   {
+    "type": "member_sig",
+    "named": true
+  },
+  {
     "type": "method",
     "named": false
   },
@@ -893,6 +1448,10 @@
   },
   {
     "type": "new",
+    "named": false
+  },
+  {
+    "type": "not",
     "named": false
   },
   {
@@ -972,6 +1531,10 @@
     "named": false
   },
   {
+    "type": "shebang",
+    "named": true
+  },
+  {
     "type": "sig",
     "named": false
   },
@@ -1013,6 +1576,14 @@
   },
   {
     "type": "un",
+    "named": false
+  },
+  {
+    "type": "unit",
+    "named": false
+  },
+  {
+    "type": "unmanaged",
     "named": false
   },
   {

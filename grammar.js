@@ -45,6 +45,7 @@ module.exports = grammar({
       [$._quote_op_right, $.symbolic_op],
       [$._quote_op_left, $.symbolic_keyword],
       [$._quote_op_right, $.symbolic_keyword],
+      [$.range_op_name, $.symbolic_keyword],
     ],
     /**
      * an array of token names which can be returned by an external scanner. External scanners allow you to write custom C code which runs during the lexing process in order to handle lexical rules (e.g. Python’s indentation tokens) that cannot be described by regular expressions.
@@ -93,6 +94,12 @@ module.exports = grammar({
         $.unativeint,
         $.int64,
         $.uint64,
+
+        $.shebang,
+        $.line_directive,
+
+        $.active_pattern_op_name,
+        $.long_identifier,
       ),
       
       // 3.1 Whitespace
@@ -276,5 +283,163 @@ module.exports = grammar({
         seq(/[0-9]+/, imm(/\.[0-9]*/)),
         seq(/[0-9]+/, optional(imm(/\.[0-9]*/)), imm(/[eE]/), optional(imm(/[+-]/)), imm(/[0-9]+/))
       )),
+
+      // TODO 3.8.1 Post-filtering of Adjacent Prefix Tokens
+      // TODO 3.8.2 Post-filtering of Integers Followed by Adjacent ".."
+      // TODO 3.8.3 Reserved Numeric Literal Forms
+      // 3.8.4 Shebang
+      // XXX how to say begining/end of line?
+      shebang: $ => /#!.*/,
+
+      // 3.9 Line Directives
+      line_directive: $ => choice(
+        seq("# ", $.int),
+        seq("# ", $.int, $.string),
+        seq("# ", $.int, $.verbatim_string),
+        seq("#line", $.int),
+        seq("#line", $.int, $.string),
+        seq("#line", $.int, $.verbatim_string),
+      ),
+
+      // TODO 3.10 Hidden Tokens
+      // TODO 3.11 Identifier Replacements
+
+      // 4.1 Operator Names
+      ident_or_op: $ => choice(
+        $.identifier,
+        seq('(', $.op_name, ')'),
+        "(*)"
+      ),
+      op_name: $ => choice(
+        $.symbolic_op,
+        $.range_op_name,
+        $.active_pattern_op_name
+      ),
+      range_op_name: $ => choice(
+        "..",
+        ".. .."
+      ),
+      active_pattern_op_name: $ => choice(
+        // full pattern
+        seq("|", $.identifier, repeat1(seq("|", $.identifier)), "|"),
+        // partial pattern
+        seq("|", $.identifier, repeat(seq("|", $.identifier)), "|", "_", "|"),
+      ),
+      // 4.2 Long Identifiers
+      long_identifier : $ => seq($.identifier, repeat1(seq(".", $.identifier))),
+      long_identifier_or_op: $ => choice(
+        seq($.long_identifier, ".", $.long_identifier_or_op),
+        $.ident_or_op),
+
+      // 4.3 Constants
+      konst: $ => choice(
+        $.sbyte, $.int16, $.int32, $.int64, $.byte, $.uint16, $.uint32, $.int, 
+        $.uint64, $.ieee32, $.ieee64, $.bignum, $.char, $.string, 
+        $.verbatim_string, $.triple_quoted_string, $.bytearray, 
+        $.verbatim_bytearray, $.bytechar, "false", "true", seq("(", ")")),
+
+      // 4.4 Operators and Precedence
+      // 4.4.1 Categorization of Symbolic Operators
+      infix_or_prefix_op: $ => choice('+', '-', '+.', '-.', '%', '&', '&&'),
+      prefix_op: $ => choice(
+        $.infix_or_prefix_op, /~+/, 
+        // !OP except !=
+        /![!%&*+-./<>@^|~?][!%&*+-./<=>@^|~?]*/
+      ),
+      infix_op: $ => choice(
+        $.infix_or_prefix_op,
+
+        /\.*-[!%&*+-./<=>@^|~?]+/,
+        /\.*\+[!%&*+-./<=>@^|~?]+/,
+        /\.*||/,
+        /\.*<[!%&*+-./<=>@^|~?]+/,
+        /\.*>[!%&*+-./<=>@^|~?]+/,
+        /\.*=/,
+        /\.*|[!%&*+-./<=>@^|~?]+/,
+        /\.*&[!%&*+-./<=>@^|~?]+/,
+        /\.*\^[!%&*+-./<=>@^|~?]+/,
+        /\.*\*[!%&*+-./<=>@^|~?]+/,
+        /\.*\/[!%&*+-./<=>@^|~?]+/,
+        /\.*%[!%&*+-./<=>@^|~?]+/,
+        /\.*!=/,
+        ":=", "::", "$", "or", "?",
+      ),
+
+      // TODO 4.4.2 Precedence of Symbolic Operators and Pattern/Expression Constructs
+      // 5. Types and Type Constraints
+      type: $ => choice(
+        seq('(', $.type, ')'),
+        seq($.type, '->', $.type),
+        seq($.type, repeat1(seq('*', $.type))),
+        $.typar,
+        $.long_identifier,
+        seq($.long_identifier, '<', $.type_args, '>'),
+        seq($.long_identifier, '<', '>'),
+        seq($.type, $.long_identifier),
+        seq($.type, '[', repeat(','), ']'),
+        seq($.type, $.typar_defns),
+        seq($.typar, ':>', $.type),
+        seq('#', $.type),
+      ),
+
+      type_args: $ => seq($.type_arg, repeat(seq(',', $.type_arg))),
+      type_arg: $ => choice(
+        $.type,
+        '$.measure', // TODO
+        '$.static_parameter' //TODO
+      ),
+      atomic_type: $ => seq($.type, ':', choice(
+        seq('#', $.type),
+        $.typar,
+        $.long_identifier,
+        seq($.long_identifier, '<', $.type_args, '>'),
+      )),
+      typar: $ => choice(
+        '_',
+        seq("'", $.identifier),
+        seq("^", $.identifier)),
+      constraint: $ => choice(
+        seq($.typar, ':>', $.type),
+        seq($.typar, ':', 'null'),
+        seq($.static_typars, ':', '(', $.member_sig, ')'),
+        seq($.typar, ':', '(', 'new', ':', 'unit', '->', "'T", ')'), // really?
+        seq($.typar, ':', 'struct'),
+        seq($.typar, ':', 'not', 'struct'),
+        seq($.typar, ':', 'enum', '<', $.type, '>'),
+        seq($.typar, ':', 'unmanaged'),
+        seq($.typar, ':', 'delegate', '<', $.type, ',', $.type, '>'),
+        seq($.typar, ':', 'equality'),
+        seq($.typar, ':', 'comparison'),
+      ),
+      typar_defn: $ => seq( /* TODO attributes_opt, */ $.typar),
+      typar_defns: $ => seq(
+        '<', $.typar_defn, repeat(seq(',', $.typar_defn)), optional($.typar_constraints)),
+      typar_constraints: $ => seq(
+        'when', $.constraint, repeat(seq('and', $.constraint))),
+      static_typars: $ => choice(
+        seq("^", $.identifier),
+        seq('(', $.identifier, repeat(seq('or', $.identifier)), ')')),
+      member_sig: $ => 'see section 10', // TODO
+      // 6. Expressions
+      expr: $ => choice(
+        $.konst,
+        seq('(', $.expr, ')'),
+        seq('begin', $.expr, 'end'),
+        $.long_identifier_or_op,
+        seq($.expr, '.', $.long_identifier_or_op),
+        seq($.expr, $.expr),
+        seq($.expr, '(', $.expr, ')'),
+        seq($.expr, '<', $.type, repeat(seq(',', $.type)), '>'),
+        seq($.expr, $.infix_op, $.expr),
+        seq($.prefix_op, $.expr),
+        seq($.expr, '.', '[', $.expr, ']'),
+        seq($.expr, '.', '[', $.slice_ranges, ']'),
+        seq($.expr, '<-', $.expr),
+        seq($.expr, repeat1(seq(',', $.expr))),
+        seq('new', $.type, $.expr),
+        seq('{', 'new', $.base_call, $.object_members, $.interface_impls, '}'),
+        seq('{', $.field_initializers, '}'),
+        seq('{', $.expr, 'with', $.field_initializers, '}'),
+      ),
     }
   });

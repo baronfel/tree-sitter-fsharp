@@ -1,0 +1,6 @@
+===
+active pattern op name
+===
+| foo | bar |
+---
+(test (active_pattern_op_name (identifier) (identifier)))
