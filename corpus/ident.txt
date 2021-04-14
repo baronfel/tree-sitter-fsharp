@@ -6,7 +6,7 @@ sample
 
 ---
 
-(test (identifier))
+(test (ident))
 
 ===
 ident with numbers
@@ -16,7 +16,7 @@ wh0ar3y0u
 
 ---
 
-(test (identifier))
+(test (ident))
 
 ===
 tick ident
@@ -26,7 +26,7 @@ tick ident
 
 --- 
 
-(test (identifier))
+(test (ident))
 
 ===
 ident with leading _
@@ -36,14 +36,14 @@ _yo
 
 ---
 
-(test (identifier))
+(test (ident))
 
 ===
 long ident
 ===
 foo.bar.baz
 ---
-(test (long_identifier (identifier) (identifier) (identifier)))
+(test (long_ident (ident) (ident) (ident)))
 
 
 ===
@@ -51,4 +51,4 @@ long ident with tick
 ===
 foo.bar.``baz``
 ---
-(test (long_identifier (identifier) (identifier) (identifier)))
+(test (long_ident (ident) (ident) (ident)))
