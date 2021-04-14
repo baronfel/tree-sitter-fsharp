@@ -304,6 +304,7 @@ module.exports = grammar({
       // TODO 3.10 Hidden Tokens
       // TODO 3.11 Identifier Replacements
 
+      // 4. Basic Grammar Elements
       // 4.1 Operator Names
       ident_or_op: $ => choice(
         $.ident,
