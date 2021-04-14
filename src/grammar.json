@@ -10,103 +10,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "ident"
-        },
-        {
-          "type": "SYMBOL",
           "name": "symbolic_op"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "bytearray"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "bytechar"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "string"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "char"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "verbatim_string"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "verbatim_bytearray"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "triple_quoted_string"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "ieee32"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "ieee64"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "int"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "xint"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "decimal"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "bignum"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "sbyte"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "byte"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "int16"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "uint16"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "int32"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "uint32"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "nativeint"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "unativeint"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "int64"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "uint64"
         },
         {
           "type": "SYMBOL",
@@ -127,6 +31,10 @@
         {
           "type": "SYMBOL",
           "name": "long_ident"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "expr"
         }
       ]
     },
@@ -434,20 +342,24 @@
       ]
     },
     "_ident_text": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "_identifier_start_char"
-        },
-        {
-          "type": "REPEAT",
-          "content": {
+      "type": "PREC_LEFT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
             "type": "SYMBOL",
-            "name": "_identifier_char"
+            "name": "_identifier_start_char"
+          },
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "SYMBOL",
+              "name": "_identifier_char"
+            }
           }
-        }
-      ]
+        ]
+      }
     },
     "_escaped_ident_text": {
       "type": "PATTERN",
@@ -2122,34 +2034,38 @@
       ]
     },
     "ident_or_op": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "ident"
-        },
-        {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "STRING",
-              "value": "("
-            },
-            {
-              "type": "SYMBOL",
-              "name": "op_name"
-            },
-            {
-              "type": "STRING",
-              "value": ")"
-            }
-          ]
-        },
-        {
-          "type": "STRING",
-          "value": "(*)"
-        }
-      ]
+      "type": "PREC_RIGHT",
+      "value": 0,
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "ident"
+          },
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "("
+              },
+              {
+                "type": "SYMBOL",
+                "name": "op_name"
+              },
+              {
+                "type": "STRING",
+                "value": ")"
+              }
+            ]
+          },
+          {
+            "type": "STRING",
+            "value": "(*)"
+          }
+        ]
+      }
     },
     "op_name": {
       "type": "CHOICE",
@@ -2414,37 +2330,41 @@
       ]
     },
     "infix_or_prefix_op": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "+"
-        },
-        {
-          "type": "STRING",
-          "value": "-"
-        },
-        {
-          "type": "STRING",
-          "value": "+."
-        },
-        {
-          "type": "STRING",
-          "value": "-."
-        },
-        {
-          "type": "STRING",
-          "value": "%"
-        },
-        {
-          "type": "STRING",
-          "value": "&"
-        },
-        {
-          "type": "STRING",
-          "value": "&&"
-        }
-      ]
+      "type": "PREC_LEFT",
+      "value": 0,
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "+"
+          },
+          {
+            "type": "STRING",
+            "value": "-"
+          },
+          {
+            "type": "STRING",
+            "value": "+."
+          },
+          {
+            "type": "STRING",
+            "value": "-."
+          },
+          {
+            "type": "STRING",
+            "value": "%"
+          },
+          {
+            "type": "STRING",
+            "value": "&"
+          },
+          {
+            "type": "STRING",
+            "value": "&&"
+          }
+        ]
+      }
     },
     "prefix_op": {
       "type": "CHOICE",

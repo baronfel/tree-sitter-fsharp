@@ -60,36 +60,35 @@ module.exports = grammar({
       // used to have a top-level node to test with until top-level acutal nodes are fleshed out
       test: $ => choice(
         $.comment,
-        $.ident,
         $.symbolic_op,
 
         // literals
-        $.bytearray,
-        $.bytechar,
-        $.string,
-        $.char,
+        //$.bytearray,
+        //$.bytechar,
+        //$.string,
+        //$.char,
 
-        $.verbatim_string,
-        $.verbatim_bytearray,
-        $.triple_quoted_string,
+        //$.verbatim_string,
+        //$.verbatim_bytearray,
+        //$.triple_quoted_string,
 
-        $.ieee32,
-        $.ieee64,
+        //$.ieee32,
+        //$.ieee64,
 
-        $.int,
-        $.xint,
-        $.decimal,
-        $.bignum,
-        $.sbyte,
-        $.byte,
-        $.int16,
-        $.uint16,
-        $.int32,
-        $.uint32,
-        $.nativeint,
-        $.unativeint,
-        $.int64,
-        $.uint64,
+        //$.int,
+        //$.xint,
+        //$.decimal,
+        //$.bignum,
+        //$.sbyte,
+        //$.byte,
+        //$.int16,
+        //$.uint16,
+        //$.int32,
+        //$.uint32,
+        //$.nativeint,
+        //$.unativeint,
+        //$.int64,
+        //$.uint64,
 
         $.shebang,
         $.line_directive,
@@ -98,7 +97,7 @@ module.exports = grammar({
         $.active_pattern_op_name,
         $.long_ident,
 
-        //$.expr
+        $.expr,
       ),
       
       // 3.1 Whitespace
@@ -157,9 +156,9 @@ module.exports = grammar({
         /'/,
         /_/
       ),
-      _ident_text: $ => seq(
+      _ident_text: $ => prec.left(seq(
         $._identifier_start_char,
-        repeat($._identifier_char)
+        repeat($._identifier_char))
       ),
       _escaped_ident_text: $ => /``([^`\n\r\t] | `[^`\n\r\t])+``/,
       ident: $ => choice(
@@ -305,11 +304,11 @@ module.exports = grammar({
 
       // 4. Basic Grammar Elements
       // 4.1 Operator Names
-      ident_or_op: $ => choice(
+      ident_or_op: $ => prec.right(choice(
         $.ident,
         seq('(', $.op_name, ')'),
         "(*)"
-      ),
+      )),
       op_name: $ => choice(
         $.symbolic_op,
         $.range_op_name,
@@ -340,7 +339,7 @@ module.exports = grammar({
 
       // 4.4 Operators and Precedence
       // 4.4.1 Categorization of Symbolic Operators
-      infix_or_prefix_op: $ => choice('+', '-', '+.', '-.', '%', '&', '&&'),
+      infix_or_prefix_op: $ => prec.left(choice('+', '-', '+.', '-.', '%', '&', '&&')),
       prefix_op: $ => choice(
         $.infix_or_prefix_op, /~+/, 
         // !OP except !=
