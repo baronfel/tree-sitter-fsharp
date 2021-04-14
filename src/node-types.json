@@ -270,12 +270,8 @@
     "fields": {},
     "children": {
       "multiple": false,
-      "required": true,
+      "required": false,
       "types": [
-        {
-          "type": "float",
-          "named": true
-        },
         {
           "type": "int",
           "named": true
@@ -598,12 +594,8 @@
     "fields": {},
     "children": {
       "multiple": false,
-      "required": true,
+      "required": false,
       "types": [
-        {
-          "type": "float",
-          "named": true
-        },
         {
           "type": "xint",
           "named": true
@@ -617,12 +609,8 @@
     "fields": {},
     "children": {
       "multiple": false,
-      "required": true,
+      "required": false,
       "types": [
-        {
-          "type": "float",
-          "named": true
-        },
         {
           "type": "xint",
           "named": true
@@ -750,11 +738,6 @@
         }
       ]
     }
-  },
-  {
-    "type": "keyword",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "konst",
@@ -1312,11 +1295,6 @@
     "fields": {}
   },
   {
-    "type": "symbolic_keyword",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "symbolic_op",
     "named": true,
     "fields": {}
@@ -1366,11 +1344,15 @@
           "named": true
         },
         {
-          "type": "float",
+          "type": "ident",
           "named": true
         },
         {
-          "type": "ident",
+          "type": "ieee32",
+          "named": true
+        },
+        {
+          "type": "ieee64",
           "named": true
         },
         {
@@ -1387,10 +1369,6 @@
         },
         {
           "type": "int64",
-          "named": true
-        },
-        {
-          "type": "keyword",
           "named": true
         },
         {
@@ -1415,10 +1393,6 @@
         },
         {
           "type": "string",
-          "named": true
-        },
-        {
-          "type": "symbolic_keyword",
           "named": true
         },
         {
@@ -1500,9 +1474,13 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "attributes",
+          "named": true
+        },
         {
           "type": "typar",
           "named": true
@@ -2159,10 +2137,6 @@
   {
     "type": "fixed",
     "named": false
-  },
-  {
-    "type": "float",
-    "named": true
   },
   {
     "type": "for",

@@ -40,12 +40,8 @@ module.exports = grammar({
      * an array of arrays of rule names. Each inner array represents a set of rules that’s involved in an LR(1) conflict that is intended to exist in the grammar. When these conflicts occur at runtime, Tree-sitter will use the GLR algorithm to explore all of the possible interpretations. If multiple parses end up succeeding, Tree-sitter will pick the subtree whose corresponding rule has the highest total dynamic precedence.
      */
     conflicts: $ => [
-      [$.symbolic_keyword, $.symbolic_op],
       [$._quote_op_left, $.symbolic_op],
       [$._quote_op_right, $.symbolic_op],
-      [$._quote_op_left, $.symbolic_keyword],
-      [$._quote_op_right, $.symbolic_keyword],
-      [$.range_op_name, $.symbolic_keyword],
     ],
     /**
      * an array of token names which can be returned by an external scanner. External scanners allow you to write custom C code which runs during the lexing process in order to handle lexical rules (e.g. Python’s indentation tokens) that cannot be described by regular expressions.
@@ -64,13 +60,7 @@ module.exports = grammar({
       // used to have a top-level node to test with until top-level acutal nodes are fleshed out
       test: $ => choice(
         $.comment,
-        $.verbatim_string,
-        $.verbatim_bytearray,
-        $.triple_quoted_string,
         $.ident,
-        $.keyword,
-        $.cond_directive,
-        $.symbolic_keyword,
         $.symbolic_op,
 
         // literals
@@ -79,9 +69,15 @@ module.exports = grammar({
         $.string,
         $.char,
 
+        $.verbatim_string,
+        $.verbatim_bytearray,
+        $.triple_quoted_string,
+
+        $.ieee32,
+        $.ieee64,
+
         $.int,
         $.xint,
-        $.float,
         $.decimal,
         $.bignum,
         $.sbyte,
@@ -97,9 +93,12 @@ module.exports = grammar({
 
         $.shebang,
         $.line_directive,
+        $.cond_directive,
 
         $.active_pattern_op_name,
         $.long_ident,
+
+        //$.expr
       ),
       
       // 3.1 Whitespace
@@ -273,13 +272,13 @@ module.exports = grammar({
       int64:      $ => seq(choice($.int, $.xint), imm('L')),
       uint64:     $ => seq(choice($.int, $.xint), imm(choice('UL', 'uL'))),
 
-      ieee32: $ => choice(seq($.float, imm("f")), seq($.xint, imm("lf"))),
-      ieee64: $ => choice($.float, seq($.xint, imm("LF"))),
+      ieee32: $ => choice(seq($._float, imm("f")), seq($.xint, imm("lf"))),
+      ieee64: $ => choice($._float, seq($.xint, imm("LF"))),
 
       bignum:     $ => seq($.int, imm(/[QRZING]/)),
-      decimal:    $ => seq(choice($.float,$.int), imm(/[Mm]/)),
+      decimal:    $ => seq(choice($._float,$.int), imm(/[Mm]/)),
 
-      float: $ => token(choice(
+      _float: $ => token(choice(
         seq(/[0-9]+/, imm(/\.[0-9]*/)),
         seq(/[0-9]+/, optional(imm(/\.[0-9]*/)), imm(/[eE]/), optional(imm(/[+-]/)), imm(/[0-9]+/))
       )),
@@ -410,7 +409,7 @@ module.exports = grammar({
         seq($.typar, ':', 'delegate', '<', $.type, ',', $.type, '>'),
         seq($.typar, ':', 'equality'),
         seq($.typar, ':', 'comparison')),
-      typar_defn: $ => seq( /* TODO attributes_opt, */ $.typar),
+      typar_defn: $ => seq( optional($.attributes), $.typar),
       typar_defns: $ => seq(
         '<', $.typar_defn, repeat(seq(',', $.typar_defn)), optional($.typar_constraints)),
       typar_constraints: $ => seq(
@@ -418,7 +417,6 @@ module.exports = grammar({
       static_typars: $ => choice(
         seq("^", $.ident),
         seq('(', $.ident, repeat(seq('or', $.ident)), ')')),
-      member_sig: $ => 'see section 10', // TODO
       // 6. Expressions
       expr: $ => choice(
         // a const value
@@ -706,6 +704,7 @@ module.exports = grammar({
         repeat(seq('|', $.rule))),
       // undefined as of yet
       member_defn: $ => "TODO",
-      attributes: $ => "TODO"
+      attributes: $ => "TODO",
+      member_sig: $ => 'see section 10', // TODO
     }
   });

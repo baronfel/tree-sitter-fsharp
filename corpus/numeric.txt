@@ -18,28 +18,28 @@ float
 ===
 3.14
 ---
-(test (float))
+(test (ieee64 ))
 
 ===
 float 2
 ===
 1.0E-3
 ---
-(test (float))
+(test (ieee64 ))
 
 ===
 float32
 ===
 1.0f
 ---
-(test (ieee32))
+(test (ieee32 ))
 
 ===
 float64
 ===
 0x7C00LF
 ---
-(test (ieee64))
+(test (ieee64 (xint)))
 
 
 ===

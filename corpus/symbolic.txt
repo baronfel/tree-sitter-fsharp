@@ -3,7 +3,7 @@ symbolic keyword
 ===
 ?
 ---
-(test (symbolic_keyword))
+(test (symbolic_op))
 
 ===
 custom symbolic op
