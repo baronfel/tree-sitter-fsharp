@@ -1,4 +1,8 @@
-# tree-sitter-fsharp
+> **NOTE**
+> This repository is now archived in favor of https://github.com/Nsidorenco/tree-sitter-fsharp - @Nsidorenco's parser is much more capable and is where the bulk of community contribution should go!
+
+
+# tree-sitter-fsharp (archived)
 ===========================
 
 F# grammar for [tree-sitter](https://github.com/tree-sitter/tree-sitter) based on the [language spec](https://fsharp.org/specs/language-spec/4.1/FSharpSpec-4.1-latest.pdf)
